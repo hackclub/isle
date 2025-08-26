@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
+
   before_action :authenticate_user!
   before_action :ensure_not_banned!
   before_action :process_iframe_login

@@ -198,6 +198,8 @@ GEM
       stringio
     puma (6.6.1)
       nio4r (~> 2.0)
+    pundit (2.5.0)
+      activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.2.0)
@@ -350,6 +352,7 @@ DEPENDENCIES
   pg (~> 1.1)
   phlex-rails (~> 2.3)
   puma (>= 5.0)
+  pundit (~> 2.5)
   rails (~> 8.0.2, >= 8.0.2.1)
   rubocop-rails-omakase
   slack-ruby-client (~> 2.7)

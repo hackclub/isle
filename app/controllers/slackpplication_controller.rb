@@ -1,5 +1,6 @@
 class SlackpplicationController < ActionController::API
   before_action :verify_slack_request!
+  include Pundit::Authorization
 
   def verify_slack_request!
     slack_request = Slack::Events::Request.new(request)
