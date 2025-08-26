@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    get "/", to: "static_pages#index", as: :root
     resources :scenes do
       member do
         post :claim
