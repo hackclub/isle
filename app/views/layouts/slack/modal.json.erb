@@ -1,0 +1,4 @@
+{
+  "trigger_id": "<%= @trigger_id %>",
+  "view": <%= raw({ 'type' => 'modal', 'callback_id' => @modal_name }.merge(JSON.parse(yield)).to_json) %>
+}

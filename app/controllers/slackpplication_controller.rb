@@ -12,4 +12,15 @@ class SlackpplicationController < ActionController::API
     render json: { error: e.message, lol: "nice try" }, status: :bad_request
     Rails.logger.error "Slack request verification failed: #{e.message}"
   end
+
+  private
+
+  def pop_modal(trigger_id, view: nil)
+    @trigger_id = trigger_id
+    @modal_name = view || @action
+
+    content = render_to_string(@modal_name, layout: 'slack/modal', formats: [:json])
+
+    SlackService.client.views_open(JSON.parse(content).symbolize_keys)
+  end
 end

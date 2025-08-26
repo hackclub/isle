@@ -31,6 +31,12 @@ class Scene < ApplicationRecord
     update!(thread_ts: res["ts"])
   end
 
+  def claim!(user)
+    update!(user:)
+  end
+
+  def claimed? = user.present?
+
   private
 
   def reply_in_thread(options = {}) = SlackService.poast(options.merge(thread_ts:))
