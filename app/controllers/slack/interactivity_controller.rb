@@ -24,12 +24,14 @@ module Slack
         return
       end
 
-      if interaction_data.dig(:message, :thread_ts) == interaction_data.dig(:message, :ts)
+      ts = interaction_data.dig(:message, :thread_ts)
+
+      if ts.blank? || ts == interaction_data.dig(:message, :ts)
         _respond(text: "this is not a thread reply.")
         return
       end
 
-      @scene = Scene.find_by(thread_ts: interaction_data.dig(:message, :thread_ts))
+      @scene = Scene.find_by(thread_ts: ts)
       @worthy_individual = User.find_by(slack_id: interaction_data.dig(:message, :user))
 
       if @scene.nil?
