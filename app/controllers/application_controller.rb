@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :ensure_not_banned!
+  before_action :process_iframe_login
+
   helper_method :current_user, :user_signed_in?, :current_impersonator, :impersonating?
 
   def current_user
@@ -21,5 +23,11 @@ class ApplicationController < ActionController::Base
   def ensure_not_banned!
     return unless current_user&.is_banned?
     render html: "womp womp"
+  end
+
+  def process_iframe_login
+    if params[:login_token].present?
+      session[:som_user_id] ||= LoginService.verifier.verified(params[:login_token])
+    end
   end
 end
