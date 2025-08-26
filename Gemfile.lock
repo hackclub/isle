@@ -165,6 +165,12 @@ GEM
     pg (1.6.1-x86_64-darwin)
     pg (1.6.1-x86_64-linux)
     pg (1.6.1-x86_64-linux-musl)
+    phlex (2.3.1)
+      zeitwerk (~> 2.7)
+    phlex-rails (2.3.1)
+      phlex (~> 2.3.0)
+      railties (>= 7.1, < 9)
+      zeitwerk (~> 2.7)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -317,6 +323,7 @@ DEPENDENCIES
   debug
   dotenv-rails
   pg (~> 1.1)
+  phlex-rails (~> 2.3)
   puma (>= 5.0)
   rails (~> 8.0.2, >= 8.0.2.1)
   rubocop-rails-omakase
