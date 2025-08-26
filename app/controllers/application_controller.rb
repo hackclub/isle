@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
 
+  prepend_before_action :process_iframe_login
   before_action :authenticate_user!
   before_action :ensure_not_banned!
-  before_action :process_iframe_login
 
   helper_method :current_user, :user_signed_in?, :current_impersonator, :impersonating?
 
