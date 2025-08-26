@@ -1,4 +1,9 @@
 module SlackService
   CHAN = Rails.env.production? ? "dunno yet" : "C09C8SQV1N0"
-  def self.client = @client ||= Slack::Web::Client.new
+
+  class << self
+    def client = @client ||= Slack::Web::Client.new
+
+    def poast(options = {}) = client.chat_postMessage(options.merge(channel: CHAN))
+  end
 end
