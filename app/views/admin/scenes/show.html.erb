@@ -1,0 +1,24 @@
+<h1>Scene #<%= @scene.id %>, <i><%= @scene.name %></i></h1>
+<b>created</b> <%= @scene.created_at.strftime("%Y-%m-%d %H:%M") %><br>
+<b>modified</b> <%= @scene.updated_at.strftime("%Y-%m-%d %H:%M") %><br>
+<b>x</b> <%= @scene.x || "?" %>, <b>y</b> <%= @scene.y || "?" %><br>
+<b>thread_ts</b> <% if @scene.thread_ts.present? %>
+  <%= link_to @scene.thread_ts, @scene.slack_thread_url, target: "_blank" %>
+<% else %>
+  <span class="text-muted">as of yet unposted</span>
+<% end %><br>
+<hr/>
+<% if @scene.claimed? %>
+  <p>claimed by <%= @scene.user.display_name %></p>
+  <%= button_to "unclaim?", unclaim_admin_scene_path(@scene), method: :post %>
+<% else %>
+  <p>currently unclaimed...</p>
+  <form action="<%= claim_admin_scene_path(@scene) %>" method="post">
+    <label for="user_id">claim for a user?</label>
+    <input type="text" name="user_id" id="user_id" placeholder="enter SoM user ID or Slack ID">
+    <button type="submit">claim!</button>
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  </form>
+<% end %>
+<hr/>
+<%= link_to "back to index", admin_scenes_path %>

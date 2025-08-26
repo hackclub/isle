@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :scenes
+    resources :scenes do
+      member do
+        post :claim
+        post :unclaim
+      end
+    end
   end
 end

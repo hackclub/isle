@@ -1,0 +1,25 @@
+<h1> where can we go on our lovely island? </h1>
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>claimed by</th>
+      <th>created</th>
+      <th>modified</th>
+      <th>actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @scenes.each do |scene| %>
+      <tr>
+        <td><%= scene.id %></td>
+        <td><%= scene.name %></td>
+        <td><%= scene.user&.display_name || "unclaimed" %></td>
+        <td><%= scene.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= scene.updated_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= link_to "administrate", admin_scene_path(scene) %>, <%= link_to "view", "https://example.com", target: "_blank" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

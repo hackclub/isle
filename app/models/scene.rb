@@ -35,7 +35,13 @@ class Scene < ApplicationRecord
     update!(user:)
   end
 
+  def unclaim! = update!(user: nil)
+
   def claimed? = user.present?
+
+  def slack_thread_url
+    "https://hackclub.slack.com/archives/#{SlackService::CHAN}/p#{thread_ts.sub(".", "")}"
+  end
 
   private
 
