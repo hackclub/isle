@@ -1,6 +1,7 @@
 class SlackpplicationController < ActionController::API
-  before_action :verify_slack_request!
   include Pundit::Authorization
+
+  before_action :verify_slack_request! unless Rails.env.development? && ENV["ALLOW_FAKE_SLACK"]
 
   def verify_slack_request!
     slack_request = Slack::Events::Request.new(request)
