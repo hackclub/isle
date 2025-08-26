@@ -16,9 +16,9 @@
         <td><%= scene.id %></td>
         <td><%= scene.name %></td>
         <td><%= scene.user&.display_name || "<i>unclaimed</i>".html_safe %></td>
-        <td><%= scene.created_at.strftime("%Y-%m-%d %H:%M") %></td>
-        <td><%= scene.updated_at.strftime("%Y-%m-%d %H:%M") %></td>
-        <td><%= link_to "administrate", admin_scene_path(scene) %>, <%= link_to "view", "https://example.com", target: "_blank" %></td>
+        <td><%= scene.created_at.strftime("%m/%d %H:%M") %></td>
+        <td><%= scene.updated_at.strftime("%m/%d %H:%M") %></td>
+        <td><%= link_to "adm", admin_scene_path(scene) %>, <%= link_to "view", "https://example.com", target: "_blank" %></td>
       </tr>
     <% end %>
   </tbody>
