@@ -2,14 +2,15 @@
 #
 # Table name: scenes
 #
-#  id         :bigint           not null, primary key
-#  name       :string
-#  thread_ts  :string
-#  x          :decimal(, )
-#  y          :decimal(, )
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :bigint
+#  id          :bigint           not null, primary key
+#  connections :integer          default([]), is an Array
+#  name        :string
+#  thread_ts   :string
+#  x           :decimal(, )
+#  y           :decimal(, )
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  user_id     :bigint
 #
 # Indexes
 #
@@ -33,6 +34,7 @@ class Scene < ApplicationRecord
 
   def claim!(user)
     update!(user:)
+    reply_in_thread(text: "*#{name}* now belongs to _<@#{user.slack_id}>_!")
   end
 
   def unclaim! = update!(user: nil)
