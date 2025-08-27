@@ -3,7 +3,7 @@ module Admin
     before_action :set_scene, except: [:index]
 
     def index
-      @scenes = Scene.all
+      @scenes = Scene.all.order(id: :asc)
     end
 
     def show
