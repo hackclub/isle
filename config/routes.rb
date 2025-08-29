@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
+  resources :scenes, only: [:index]
   get "up" => "rails/health#show", as: :rails_health_check
   root "static_pages#index"
+  get "/debug" => "static_pages#debug"
 
   namespace :slack do
     post "interactivity" => "interactivity#create"
