@@ -4,6 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  connections :integer          default([]), is an Array
+#  description :text
 #  name        :string
 #  thread_ts   :string
 #  x           :decimal(, )

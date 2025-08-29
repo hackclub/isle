@@ -6,6 +6,7 @@ module Scenecore
         s = Scene.find_or_create_by(id: scene[:id])
         s.x, s.y = scene[:x], scene[:y]
         s.name = scene[:name]
+        s.description = scene[:description]
         s.connections = scene[:connections]
         s.save!
       end
