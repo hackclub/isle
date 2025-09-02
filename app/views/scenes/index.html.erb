@@ -1,2 +1,27 @@
-<h1>Scenes#index</h1>
-<p>Find me in app/views/scenes/index.html.erb</p>
+<% content_for :head do %>
+  <%= vite_javascript_tag "map_viewer" %>
+  <%= vite_stylesheet_tag "map_viewer.scss" %>
+<% end %>
+<div id="app">
+  <div id="hover-display" class="hover-display"></div>
+  <div id="map-container">
+    <%= image_tag "/map.png", id: "map-image", alt: "Map" %>
+    <svg id="overlay-svg"></svg>
+  </div>
+</div>
+<script>
+  // Pass Rails data to JavaScript
+  window.railsScenes = <%= @scenes.map { |scene|
+    {
+      id: scene.id,
+      name: scene.name,
+      description: scene.description,
+      x: scene.x,
+      y: scene.y,
+      connections: scene.connections,
+      claimed: scene.claimed?,
+      claimed_by: scene.user&.slack_id,
+      slack_thread_url: scene.thread_ts.present? ? scene.slack_thread_url : nil
+    }
+  }.to_json.html_safe %>;
+</script>
