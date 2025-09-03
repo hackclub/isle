@@ -20,7 +20,7 @@
       y: scene.y,
       connections: scene.connections,
       claimed: scene.claimed?,
-      claimed_by: scene.user&.slack_id,
+      claimed_by: scene.user&.display_name,
       slack_thread_url: scene.thread_ts.present? ? scene.slack_thread_url : nil
     }
   }.to_json.html_safe %>;
