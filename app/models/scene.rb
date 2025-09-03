@@ -43,7 +43,7 @@ class Scene < ApplicationRecord
   def claimed? = user.present?
 
   def slack_thread_url
-    "https://hackclub.slack.com/archives/#{SlackService::CHAN}/p#{thread_ts.sub(".", "")}"
+    thread_ts.present? && "https://hackclub.slack.com/archives/#{SlackService::CHAN}/p#{thread_ts.sub(".", "")}"
   end
 
   private
