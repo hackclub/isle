@@ -30,7 +30,7 @@ class Scene < ApplicationRecord
       >#{description}
     EOT
 
-    res = SlackService.poast(text:)
+    res = SlackService.poast(text:, unfurl_links: false, unfurl_media: false)
     update!(thread_ts: res["ts"])
     reply_in_thread(text: "🧵...")
   end
