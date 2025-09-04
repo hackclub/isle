@@ -1,5 +1,5 @@
 module SlackService
-  CHAN = Rails.env.production? ? "C09C8SQV1N0" : "C09C8SQV1N0"
+  CHAN = Rails.env.production? ? "C09DQ3EB40L" : "C09C8SQV1N0"
 
   class << self
     def client = @client ||= Slack::Web::Client.new
