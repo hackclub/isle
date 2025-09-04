@@ -56,4 +56,7 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.hosts << "fruitbook.tailde0b0d.ts.net"
+
+  # Allow cookies in iframes during development
+  config.action_dispatch.cookies_same_site_protection = :none
 end

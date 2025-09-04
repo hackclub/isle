@@ -1,5 +1,6 @@
 class ScenesController < ApplicationController
   before_action :set_scene, except: [:index]
+  skip_before_action :authenticate_user!, only: [:show]
 
   def index
     @scenes = Scene.includes(:user).order(id: :asc)
