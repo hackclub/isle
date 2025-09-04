@@ -31,7 +31,10 @@ class Scene < ApplicationRecord
 
     res = SlackService.poast(text:)
     update!(thread_ts: res["ts"])
+    reply_in_thread("🧵...")
   end
+
+  def live_url = "#{Rails.application.credentials.github.pages_base_url}scenes/#{id}/"
 
   def claim!(user)
     update!(user:)

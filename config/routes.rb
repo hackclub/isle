@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :scenes, only: [:index]
+  resources :scenes, only: [:index, :show]
   get "up" => "rails/health#show", as: :rails_health_check
   root "static_pages#index"
   get "/debug" => "static_pages#debug"

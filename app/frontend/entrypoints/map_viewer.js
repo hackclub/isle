@@ -445,19 +445,29 @@ function showHoverDisplay(scene) {
     if (scene.claimed) {
         // Scene is claimed
         const username = scene.claimed_by || 'Unknown user';
-        statusDiv.textContent = `claimed by ${username}`;
-    } else if (scene.slack_thread_url) {
-        // Scene is unclaimed but has a slack thread
+        statusDiv.textContent = `made by ${username} – `;
         const link = document.createElement('a');
-        link.href = scene.slack_thread_url;
-        link.textContent = 'discuss on slack';
+        link.href = scene.path;
+        link.textContent = 'visit!';
+        link.style.color = '#4A9EFF';
+        link.style.textDecoration = 'underline';
+        link.target = '_self';
+        statusDiv.appendChild(link);
+    } else {
+        // Scene is unclaimed - always show slack link
+        statusDiv.textContent = 'unclaimed • ';
+        const link = document.createElement('a');
+        if (scene.slack_thread_url) {
+            link.href = scene.slack_thread_url;
+        } else {
+            // If no thread exists yet, link to general channel
+            link.href = 'https://hackclub.slack.com/channels/isle';
+        }
+        link.textContent = 'discuss in slack';
         link.style.color = '#4A9EFF';
         link.style.textDecoration = 'underline';
         link.target = '_blank';
         statusDiv.appendChild(link);
-    } else {
-        // Scene is unclaimed and has no thread
-        statusDiv.textContent = 'unclaimed';
     }
     
     hoverDisplay.appendChild(statusDiv);
@@ -535,7 +545,8 @@ function initializeFromRailsData(railsScenes) {
             // Preserve Rails-specific fields
             claimed: scene.claimed,
             claimed_by: scene.claimed_by,
-            slack_thread_url: scene.slack_thread_url
+            slack_thread_url: scene.slack_thread_url,
+            path: scene.path
         };
     });
     
