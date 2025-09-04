@@ -26,12 +26,13 @@ class Scene < ApplicationRecord
 
   def post_to_slack!
     text = <<~EOT
-      this thread would be a great place to talk about *#{name}*!
+      *<https://summer.hackclub.com/s?scene=#{id}|#{name}>* _(Scene #{id})_
+      >#{description}
     EOT
 
     res = SlackService.poast(text:)
     update!(thread_ts: res["ts"])
-    reply_in_thread("🧵...")
+    reply_in_thread(text: "🧵...")
   end
 
   def live_url = "#{Rails.application.credentials.github.pages_base_url}scenes/#{id}/"
