@@ -1,2 +1,2 @@
-<i><%= @scene.name %></i> <a href="<%= scenes_path %>">< back to map</a>
-    <iframe src="<%= @scene.live_url %>" style="width: 100%; height: 100vh; border: none;"></iframe>
+<a href="<%= scenes_path %>">< back to map</a> | <i><%= @scene.name %></i> – <%= @scene.description %></small> | made by <%= link_to @scene.user.display_name, "https://summer.hackclub.com/users/#{@scene.user.id}", target: "_blank" %> | <%= link_to "slack thread", @scene.slack_thread_url, target: "_blank" %> | <%= link_to "source code", "https://github.com/hackclub/som-grand-survey-expedition/tree/main/scenes/#{@scene.id}", target: "_blank" %> <small>
+<iframe src="<%= @scene.live_url %>" style="width: 100%; height: 100vh; border: none;"></iframe>

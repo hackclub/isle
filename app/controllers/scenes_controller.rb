@@ -1,6 +1,6 @@
 class ScenesController < ApplicationController
   before_action :set_scene, except: [:index]
-  skip_before_action :authenticate_user!, only: [:show]
+  # skip_before_action :authenticate_user!, only: [:show]
 
   def index
     @scenes = Scene.includes(:user).order(id: :asc)
@@ -12,6 +12,6 @@ class ScenesController < ApplicationController
   private
 
   def set_scene
-    @scene = Scene.find(params[:id])
+    @scene = Scene.includes(:user).find(params[:id])
   end
 end
