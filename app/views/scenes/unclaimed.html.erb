@@ -2,4 +2,4 @@
 <a href="<%= scenes_path %>">< back to map</a> | <i><b><%= @scene.name %></b> – <%= @scene.description %></i> | nobody's designed this scene yet! | <%= link_to "slack thread", @scene.slack_thread_url, target: "_blank" %>
 <h1>404!!</h1>
 <p>this location hasn't been discovered yet...</p>
-<p>could you be the one to <a href="https://hackclub.slack.com/archives/C09DQ3EB40L" target="_blank">break new ground?</a></p>
+<p>could you be the one to <%= link_to "figure out what goes there?", @scene.slack_thread_url, target: "_blank"%></p>
