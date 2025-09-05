@@ -446,13 +446,29 @@ function showHoverDisplay(scene) {
         // Scene is claimed
         const username = scene.claimed_by || 'Unknown user';
         statusDiv.textContent = `made by ${username} – `;
-        const link = document.createElement('a');
-        link.href = scene.path;
-        link.textContent = 'visit!';
-        link.style.color = '#4A9EFF';
-        link.style.textDecoration = 'underline';
-        link.target = '_self';
-        statusDiv.appendChild(link);
+        const visitLink = document.createElement('a');
+        visitLink.href = scene.path;
+        visitLink.textContent = 'visit!';
+        visitLink.style.color = '#4A9EFF';
+        visitLink.style.textDecoration = 'underline';
+        visitLink.target = '_self';
+        statusDiv.appendChild(visitLink);
+        
+        // Add slack link for claimed scenes too
+        const slackText = document.createTextNode(' • ');
+        statusDiv.appendChild(slackText);
+        const slackLink = document.createElement('a');
+        if (scene.slack_thread_url) {
+            slackLink.href = scene.slack_thread_url;
+        } else {
+            // If no thread exists yet, link to general channel
+            slackLink.href = 'https://hackclub.slack.com/archives/C09DQ3EB40L';
+        }
+        slackLink.textContent = 'discuss in slack';
+        slackLink.style.color = '#4A9EFF';
+        slackLink.style.textDecoration = 'underline';
+        slackLink.target = '_blank';
+        statusDiv.appendChild(slackLink);
     } else {
         // Scene is unclaimed - always show slack link
         statusDiv.textContent = 'unclaimed • ';
@@ -461,7 +477,7 @@ function showHoverDisplay(scene) {
             link.href = scene.slack_thread_url;
         } else {
             // If no thread exists yet, link to general channel
-            link.href = 'https://hackclub.slack.com/channels/isle';
+            link.href = 'https://hackclub.slack.com/archives/C09DQ3EB40L';
         }
         link.textContent = 'discuss in slack';
         link.style.color = '#4A9EFF';
