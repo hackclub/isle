@@ -7,6 +7,7 @@ class ScenesController < ApplicationController
   end
 
   def show
+    return render :unclaimed unless @scene.claimed?
   end
 
   private
