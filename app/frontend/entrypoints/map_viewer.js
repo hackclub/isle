@@ -420,6 +420,14 @@ function updateConnections() {
 function showHoverDisplay(scene) {
     const hoverDisplay = document.getElementById('hover-display');
     
+    if (scene.y > 0.5) {
+        hoverDisplay.classList.remove('top');
+        hoverDisplay.classList.add('bottom');
+    } else {
+        hoverDisplay.classList.remove('bottom');
+        hoverDisplay.classList.add('top');
+    }
+    
     // Clear previous content
     hoverDisplay.innerHTML = '';
     
