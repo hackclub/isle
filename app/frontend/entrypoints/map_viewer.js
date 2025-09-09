@@ -4,14 +4,20 @@ import LZString from 'lz-string';
 // Global variables
 let scenes = [];
 let connections = [];
-let imageAspectRatio = 1;
-let imageWidth = 0;
-let imageHeight = 0;
+let imageAspectRatio = 1; // based on the ACTUAL rendered image area
+let imageWidth = 0; // container width
+let imageHeight = 0; // container height
 let svgWidth = 0;
 let svgHeight = 0;
 let isStateLoaded = false;
 let selectedScene = null;
 let nodeClickOccurred = false;
+
+// Rendered image metrics (letterboxed inside container)
+let imageDisplayWidth = 0; // actual displayed image width
+let imageDisplayHeight = 0; // actual displayed image height
+let imageOffsetX = 0; // offset of image inside container (left letterbox)
+let imageOffsetY = 0; // offset of image inside container (top letterbox)
 
 // Settings
 let settings = {
@@ -253,21 +259,70 @@ function updateSceneConnections() {
     }
 }
 
-// Convert normalized coordinates to pixel coordinates
+// Compute actual displayed image metrics (object-fit: contain) and update svg size
+function updateImageMetrics() {
+    const container = document.getElementById('map-container');
+    const mapImage = document.getElementById('map-image');
+    const svg = d3.select('#overlay-svg');
+    if (!container || !mapImage || svg.empty()) return;
+
+    const containerRect = container.getBoundingClientRect();
+
+    imageWidth = containerRect.width;
+    imageHeight = containerRect.height;
+
+    // Compute displayed image box for object-fit: contain using natural dimensions
+    const naturalWidth = mapImage.naturalWidth || 0;
+    const naturalHeight = mapImage.naturalHeight || 0;
+
+    if (naturalWidth > 0 && naturalHeight > 0) {
+        const scale = Math.min(imageWidth / naturalWidth, imageHeight / naturalHeight);
+        imageDisplayWidth = naturalWidth * scale;
+        imageDisplayHeight = naturalHeight * scale;
+        imageOffsetX = (imageWidth - imageDisplayWidth) / 2;
+        imageOffsetY = (imageHeight - imageDisplayHeight) / 2;
+    } else {
+        // Fallback to DOM sizes if natural sizes aren't available
+        const imageRect = mapImage.getBoundingClientRect();
+        imageDisplayWidth = imageRect.width;
+        imageDisplayHeight = imageRect.height;
+        imageOffsetX = imageRect.left - containerRect.left;
+        imageOffsetY = imageRect.top - containerRect.top;
+    }
+
+    imageAspectRatio = imageDisplayWidth / imageDisplayHeight;
+
+    // Make SVG cover the container; we position elements using image offsets
+    svgWidth = imageWidth;
+    svgHeight = imageHeight;
+    svg.attr('width', svgWidth).attr('height', svgHeight);
+
+    // Debug
+    // console.log('Container', containerRect, { imageDisplayWidth, imageDisplayHeight, imageOffsetX, imageOffsetY, imageAspectRatio, naturalWidth, naturalHeight });
+}
+
+// Convert normalized coordinates to pixel coordinates (within the displayed image area, offset inside container)
 function normalizedToPixelX(normalizedX) {
-    return (normalizedX / imageAspectRatio + 1) * (imageWidth / 2);
+    return (normalizedX / imageAspectRatio + 1) * (imageDisplayWidth / 2) + imageOffsetX;
 }
 
 function normalizedToPixelY(normalizedY) {
-    return (-normalizedY + 1) * (imageHeight / 2);
+    return (-normalizedY + 1) * (imageDisplayHeight / 2) + imageOffsetY;
 }
 
 function pixelToNormalizedX(pixelX) {
-    return ((pixelX / (imageWidth / 2)) - 1) * imageAspectRatio;
+    return (((pixelX - imageOffsetX) / (imageDisplayWidth / 2)) - 1) * imageAspectRatio;
 }
 
 function pixelToNormalizedY(pixelY) {
-    return -((pixelY / (imageHeight / 2)) - 1);
+    return -(((pixelY - imageOffsetY) / (imageDisplayHeight / 2)) - 1);
+}
+
+function recalcScenePixels() {
+    for (let i = 0; i < scenes.length; i++) {
+        scenes[i].pixelX = normalizedToPixelX(scenes[i].x);
+        scenes[i].pixelY = normalizedToPixelY(scenes[i].y);
+    }
 }
 
 function renderScenes() {
@@ -525,8 +580,6 @@ function deselectScene() {
     console.log('Deselected scene');
 }
 
-
-
 function setupEventListeners() {
     const mapContainer = document.getElementById('map-container');
     if (mapContainer) {
@@ -537,9 +590,20 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Handle dynamic resize: recompute metrics and rerender
+    let resizeTimeout = null;
+    function onResize() {
+        updateImageMetrics();
+        recalcScenePixels();
+        renderConnections();
+        renderScenes();
+    }
+    window.addEventListener('resize', () => {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(onResize, 100);
+    });
 }
-
-
 
 function initializeFromRailsData(railsScenes) {
     console.log('Initializing from Rails data:', railsScenes);
@@ -622,26 +686,18 @@ function initialize() {
     }
     
     function onImageLoad() {
-        const container = document.getElementById('map-container');
-        const containerRect = container.getBoundingClientRect();
+        // Measure actual image placement and container, set up svg size
+        updateImageMetrics();
         
-        imageWidth = containerRect.width;
-        imageHeight = containerRect.height;
-        imageAspectRatio = imageWidth / imageHeight;
-        
-        svgWidth = imageWidth;
-        svgHeight = imageHeight;
-        
-        svg
-            .attr('width', svgWidth)
-            .attr('height', svgHeight);
-        
-        console.log(`Image loaded: ${imageWidth}x${imageHeight}, aspect ratio: ${imageAspectRatio}`);
+        console.log(`Image loaded: displayed ${imageDisplayWidth}x${imageDisplayHeight} at offset (${imageOffsetX}, ${imageOffsetY}) | container ${imageWidth}x${imageHeight}, aspect ratio: ${imageAspectRatio}`);
         
         // Initialize scenes from Rails data (passed via window.railsScenes)
         if (window.railsScenes) {
             initializeFromRailsData(window.railsScenes);
         }
+
+        // Ensure pixels align to current image metrics
+        recalcScenePixels();
         
         renderScenes();
         renderConnections();
