@@ -22,7 +22,7 @@
       connections: scene.connections,
       claimed: scene.claimed?,
       claimed_by: scene.user&.display_name,
-      slack_thread_url: scene.thread_ts.present? ? scene.slack_thread_url : nil,
+      slack_thread_url: scene.slack_thread_url,
       path: scene_path(scene),
       completed: @completed_scenes.include?(scene.id)
     }

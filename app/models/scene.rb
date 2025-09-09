@@ -7,6 +7,7 @@
 #  description :text
 #  name        :string
 #  thread_ts   :string
+#  thread_url  :string
 #  x           :decimal(, )
 #  y           :decimal(, )
 #  created_at  :datetime         not null
@@ -47,7 +48,11 @@ class Scene < ApplicationRecord
   def claimed? = user.present?
 
   def slack_thread_url
-    thread_ts.present? && "https://hackclub.slack.com/archives/#{SlackService::CHAN}/p#{thread_ts.sub(".", "")}"
+    if thread_url.present?
+      thread_url
+    elsif thread_ts.present?
+      "https://hackclub.slack.com/archives/#{SlackService::CHAN}/p#{thread_ts.sub(".", "")}"
+    end
   end
 
   private
