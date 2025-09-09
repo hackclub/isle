@@ -534,14 +534,18 @@ function showHoverDisplay(scene) {
     if (scene.claimed) {
         // Scene is claimed
         const username = scene.claimed_by || 'Unknown user';
-        statusDiv.textContent = `made by ${username} – `;
-        const visitLink = document.createElement('a');
-        visitLink.href = scene.path;
-        visitLink.textContent = 'visit!';
-        visitLink.style.color = '#4A9EFF';
-        visitLink.style.textDecoration = 'underline';
-        visitLink.target = '_self';
-        statusDiv.appendChild(visitLink);
+        if (scene.completed) {
+            statusDiv.textContent = `made by ${username} – `;
+            const visitLink = document.createElement('a');
+            visitLink.href = scene.path;
+            visitLink.textContent = 'visit!';
+            visitLink.style.color = '#4A9EFF';
+            visitLink.style.textDecoration = 'underline';
+            visitLink.target = '_self';
+            statusDiv.appendChild(visitLink);
+        } else {
+            statusDiv.textContent = `made by ${username} `;
+        }
         
         // Add slack link for claimed scenes too
         const slackText = document.createTextNode(' • ');
