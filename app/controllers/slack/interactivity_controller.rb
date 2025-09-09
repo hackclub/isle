@@ -1,6 +1,6 @@
 module Slack
   class InteractivityController < SlackpplicationController
-    ACCEPTABLE_TYPES = %w(message_action)
+    ACCEPTABLE_TYPES = %w[message_action]
 
     def create
       return nope unless ACCEPTABLE_TYPES.include?(interaction_data[:type])
@@ -55,7 +55,7 @@ module Slack
 
     ###
 
-    VALID_MESSAGE_ACTIONS = %w(claim_scene)
+    VALID_MESSAGE_ACTIONS = %w[claim_scene]
 
     def handle_message_action
       return nope unless VALID_MESSAGE_ACTIONS.include?(interaction_data[:callback_id])

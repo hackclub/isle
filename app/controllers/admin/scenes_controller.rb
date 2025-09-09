@@ -1,6 +1,6 @@
 module Admin
   class ScenesController < Admin::ApplicationController
-    before_action :set_scene, except: [:index]
+    before_action :set_scene, except: [ :index ]
 
     def index
       @scenes = Scene.all.order(id: :asc)

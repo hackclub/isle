@@ -31,5 +31,4 @@
 #  slack_id                             :string
 #
 class User < SoMRecord
-
 end

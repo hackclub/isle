@@ -1,5 +1,5 @@
 class ScenesController < ApplicationController
-  before_action :set_scene, except: [:index]
+  before_action :set_scene, except: [ :index ]
   # skip_before_action :authenticate_user!, only: [:show]
 
   def index
@@ -8,7 +8,7 @@ class ScenesController < ApplicationController
   end
 
   def show
-    return render :unclaimed unless @scene.claimed?
+    render :unclaimed unless @scene.claimed?
   end
 
   private
