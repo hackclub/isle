@@ -3,9 +3,9 @@ module GitHubService
     # Returns an array of completed scene IDs (directory names under scenes/ in the external repo)
     # Caches aggressively for 1 hour to avoid GitHub API rate limits.
     def completed_scene_ids
-        # Rails.cache.fetch("github.completed_scene_ids", expires_in: 1.hour) do
+      Rails.cache.fetch("github.completed_scene_ids", expires_in: 5.minutes) do
         fetch_completed_scene_ids_from_github
-      # end
+      end
     end
 
     private
