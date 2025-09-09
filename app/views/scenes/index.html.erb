@@ -3,9 +3,10 @@
   <%= vite_stylesheet_tag "map_viewer.scss" %>
 <% end %>
 <div id="app">
+  <%= image_tag "/overlay.png", id: "overlay-image", alt: "Overlay" %>
   <div id="hover-display" class="hover-display"></div>
   <div id="map-container">
-    <%= image_tag "/map.png", id: "map-image", alt: "Map" %>
+    <%= image_tag "/map.jpg", id: "map-image", alt: "Map" %>
     <svg id="overlay-svg"></svg>
   </div>
 </div>

@@ -13,6 +13,9 @@ let isStateLoaded = false;
 let selectedScene = null;
 let nodeClickOccurred = false;
 
+// UI scale (smaller on smaller screens)
+let uiScale = 1;
+
 // Rendered image metrics (letterboxed inside container)
 let imageDisplayWidth = 0; // actual displayed image width
 let imageDisplayHeight = 0; // actual displayed image height
@@ -260,6 +263,16 @@ function updateSceneConnections() {
 }
 
 // Compute actual displayed image metrics (object-fit: contain) and update svg size
+function updateUIScale() {
+    // Scale UI based on displayed image or container width
+    const baseWidth = 1200; // reference width for full scale
+    const minScale = 0.55;
+    const maxScale = 1.0;
+    // Prefer displayed image width if available, else fall back to container width
+    const reference = imageDisplayWidth > 0 ? imageDisplayWidth : imageWidth;
+    uiScale = Math.max(minScale, Math.min(maxScale, reference / baseWidth));
+}
+
 function updateImageMetrics() {
     const container = document.getElementById('map-container');
     const mapImage = document.getElementById('map-image');
@@ -291,6 +304,9 @@ function updateImageMetrics() {
     }
 
     imageAspectRatio = imageDisplayWidth / imageDisplayHeight;
+
+    // Update UI scale based on current size
+    updateUIScale();
 
     // Make SVG cover the container; we position elements using image offsets
     svgWidth = imageWidth;
@@ -340,19 +356,27 @@ function renderScenes() {
         .attr('transform', d => `translate(${d.pixelX}, ${d.pixelY})`)
         .style('cursor', 'pointer');
     
+    const baseR = 8 * uiScale;
+    const selectedR = 10 * uiScale;
+    const hoverR = 12 * uiScale;
+    const baseStroke = 1.5 * uiScale;
+    const selectedStroke = 3 * uiScale;
+    const hoverStrokeSelected = 4 * uiScale;
+    const hoverStroke = 2.5 * uiScale;
+
     sceneGroups.append('circle')
-        .attr('r', d => d.id === selectedScene ? 10 : 8)
+        .attr('r', d => d.id === selectedScene ? selectedR : baseR)
         .attr('fill', d => d.completed ? '#4fc460' : (d.claimed? '#f8b04b' : '#FF6B6B'))
         .attr('stroke', d => d.id === selectedScene ? '#FFA500' : '#ffffff')
-        .attr('stroke-width', d => d.id === selectedScene ? 3 : 1.5)
-        .attr('data-radius', d => d.id === selectedScene ? 10 : 8)
+        .attr('stroke-width', d => d.id === selectedScene ? selectedStroke : baseStroke)
+        .attr('data-radius', d => d.id === selectedScene ? selectedR : baseR)
         .style('transition', 'r 0.2s ease, stroke-width 0.2s ease');
     
     sceneGroups.append('text')
         .attr('text-anchor', 'middle')
         .attr('dy', '0.35em')
         .attr('fill', '#ffffff')
-        .attr('font-size', '8px')
+        .attr('font-size', `${Math.max(6, 8 * uiScale).toFixed(2)}px`)
         .attr('font-weight', 'bold')
         .style('user-select', 'none')
         .style('pointer-events', 'none')
@@ -364,15 +388,15 @@ function renderScenes() {
             event.stopPropagation();
             showHoverDisplay(d);
             d3.select(this)
-                .attr('r', 12)
-                .attr('stroke-width', d.id === selectedScene ? 4 : 2.5);
+                .attr('r', hoverR)
+                .attr('stroke-width', d.id === selectedScene ? hoverStrokeSelected : hoverStroke);
         })
         .on('mouseleave', function(event, d) {
             console.log('Mouse leave on scene:', d.id);
             event.stopPropagation();
             d3.select(this)
-                .attr('r', d.id === selectedScene ? 10 : 8)
-                .attr('stroke-width', d.id === selectedScene ? 3 : 1.5);
+                .attr('r', d.id === selectedScene ? selectedR : baseR)
+                .attr('stroke-width', d.id === selectedScene ? selectedStroke : baseStroke);
             
             if (selectedScene !== null) {
                 const selectedSceneData = scenes.find(s => s.id === selectedScene);
@@ -419,7 +443,7 @@ function renderConnections() {
             return endpoints.y2;
         })
         .attr('stroke', d => d.bidirectional ? '#4ECDC4' : '#FFE66D')
-        .attr('stroke-width', d => d.bidirectional ? 4 : 3)
+        .attr('stroke-width', d => (d.bidirectional ? 4 : 3) * uiScale)
         .attr('stroke-dasharray', d => d.bidirectional ? 'none' : '5,5')
         .style('filter', 'drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.8))');
     
@@ -448,7 +472,9 @@ function renderConnections() {
 }
 
 function calculateLineEndpoints(scene1, scene2) {
-    const radius = 6;
+    // Use scaled radii to stop lines at circle edges
+    const r1 = (scene1.id === selectedScene ? 10 : 8) * uiScale;
+    const r2 = (scene2.id === selectedScene ? 10 : 8) * uiScale;
     const dx = scene2.pixelX - scene1.pixelX;
     const dy = scene2.pixelY - scene1.pixelY;
     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -460,10 +486,10 @@ function calculateLineEndpoints(scene1, scene2) {
     const unitX = dx / distance;
     const unitY = dy / distance;
     
-    const startX = scene1.pixelX + unitX * radius;
-    const startY = scene1.pixelY + unitY * radius;
-    const endX = scene2.pixelX - unitX * radius;
-    const endY = scene2.pixelY - unitY * radius;
+    const startX = scene1.pixelX + unitX * r1;
+    const startY = scene1.pixelY + unitY * r1;
+    const endX = scene2.pixelX - unitX * r2;
+    const endY = scene2.pixelY - unitY * r2;
     
     return { x1: startX, y1: startY, x2: endX, y2: endY };
 }

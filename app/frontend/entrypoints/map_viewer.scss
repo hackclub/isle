@@ -6,7 +6,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #1a1a1a;
+    background: #41A5E7;
     color: #ffffff;
     overflow: hidden;
 }
@@ -31,6 +31,23 @@ body {
     display: block;
 }
 
+#overlay-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* fill screen and keep aspect ratio */
+    object-position: center center;
+    display: block;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+}
+
 #overlay-svg {
     position: absolute;
     top: 0;
@@ -38,6 +55,7 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: all;
+    z-index: 2;
 }
 
 #overlay-svg .scene {
