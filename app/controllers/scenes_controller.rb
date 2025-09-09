@@ -3,6 +3,7 @@ class ScenesController < ApplicationController
   # skip_before_action :authenticate_user!, only: [:show]
 
   def index
+    @completed_scenes = GitHubService.completed_scene_ids
     @scenes = Scene.includes(:user).order(id: :asc)
   end
 

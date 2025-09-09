@@ -276,7 +276,7 @@ function renderScenes() {
     svg.selectAll('.scene').remove();
     
     console.log('Rendering scenes:', scenes.length, 'scenes');
-    
+
     const sceneGroups = svg.selectAll('.scene')
         .data(scenes)
         .enter()
@@ -286,11 +286,11 @@ function renderScenes() {
         .style('cursor', 'pointer');
     
     sceneGroups.append('circle')
-        .attr('r', 6)
-        .attr('fill', d => d.id === selectedScene ? '#FFD700' : (d.claimed ? '#4fc460' : '#FF6B6B'))
+        .attr('r', d => d.id === selectedScene ? 10 : 8)
+        .attr('fill', d => d.completed ? '#4fc460' : (d.claimed? '#f8b04b' : '#FF6B6B'))
         .attr('stroke', d => d.id === selectedScene ? '#FFA500' : '#ffffff')
         .attr('stroke-width', d => d.id === selectedScene ? 3 : 1.5)
-        .attr('data-radius', 6)
+        .attr('data-radius', d => d.id === selectedScene ? 10 : 8)
         .style('transition', 'r 0.2s ease, stroke-width 0.2s ease');
     
     sceneGroups.append('text')
@@ -309,14 +309,14 @@ function renderScenes() {
             event.stopPropagation();
             showHoverDisplay(d);
             d3.select(this)
-                .attr('r', 10)
+                .attr('r', 12)
                 .attr('stroke-width', d.id === selectedScene ? 4 : 2.5);
         })
         .on('mouseleave', function(event, d) {
             console.log('Mouse leave on scene:', d.id);
             event.stopPropagation();
             d3.select(this)
-                .attr('r', 6)
+                .attr('r', d.id === selectedScene ? 10 : 8)
                 .attr('stroke-width', d.id === selectedScene ? 3 : 1.5);
             
             if (selectedScene !== null) {
@@ -570,7 +570,8 @@ function initializeFromRailsData(railsScenes) {
             claimed: scene.claimed,
             claimed_by: scene.claimed_by,
             slack_thread_url: scene.slack_thread_url,
-            path: scene.path
+            path: scene.path,
+            completed: scene.completed
         };
     });
     

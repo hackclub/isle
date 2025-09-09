@@ -22,7 +22,8 @@
       claimed: scene.claimed?,
       claimed_by: scene.user&.display_name,
       slack_thread_url: scene.thread_ts.present? ? scene.slack_thread_url : nil,
-      path: scene_path(scene)
+      path: scene_path(scene),
+      completed: @completed_scenes.include?(scene.id)
     }
   }.to_json.html_safe %>;
 </script>
