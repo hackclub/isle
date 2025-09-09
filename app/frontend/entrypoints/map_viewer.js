@@ -287,7 +287,7 @@ function renderScenes() {
     
     sceneGroups.append('circle')
         .attr('r', 6)
-        .attr('fill', d => d.id === selectedScene ? '#FFD700' : '#FF6B6B')
+        .attr('fill', d => d.id === selectedScene ? '#FFD700' : (d.claimed ? '#4fc460' : '#FF6B6B'))
         .attr('stroke', d => d.id === selectedScene ? '#FFA500' : '#ffffff')
         .attr('stroke-width', d => d.id === selectedScene ? 3 : 1.5)
         .attr('data-radius', 6)
