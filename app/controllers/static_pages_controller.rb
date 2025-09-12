@@ -8,5 +8,6 @@ class StaticPagesController < ApplicationController
   end
 
   def dash
+    @scenes = Scene.all
   end
 end
