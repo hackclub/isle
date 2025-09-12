@@ -1,0 +1,25 @@
+<h1> where can we go on our lovely island? </h1>
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>claimed by</th>
+      <th>actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @scenes.each do |scene| %>
+      <tr>
+        <td><%= scene.id %></td>
+        <td><%= scene.name %></td>
+        <td><%= scene.user&.display_name || "<i>unclaimed</i>".html_safe %></td>
+        <td><%= link_to "view", scene.live_url, target: "_blank" %>, <%= link_to "slack", scene.slack_thread_url, target: "_blank" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p>
+  <a href="https://summer.hackclub.com/s">Return to Map</a>
+</p>
+<hr/>
