@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
 
   def ensure_not_banned!
     return unless current_user&.is_banned?
-    render html: "womp womp"
+    render html: "womp womp, you're banned".html_safe, status: :forbidden
   end
 
   def process_iframe_login

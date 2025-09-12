@@ -6,4 +6,7 @@ class StaticPagesController < ApplicationController
 
   def debug
   end
+
+  def dash
+  end
 end
