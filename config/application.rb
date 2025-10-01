@@ -39,8 +39,11 @@ module Isle
     # Don't generate system test files.
     config.generators.system_tests = nil
 
-    config.action_dispatch.default_headers = {
-      "X-Frame-Options" => "ALLOWALL"
-    }
+    # Default headers (allow iframes + enable COOP/COEP for WebGL / SharedArrayBuffer)
+    config.action_dispatch.default_headers.merge!({
+      "X-Frame-Options" => "ALLOWALL",
+      "Cross-Origin-Opener-Policy" => "same-origin",
+      "Cross-Origin-Embedder-Policy" => "require-corp"
+    })
   end
 end
