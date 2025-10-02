@@ -38,9 +38,10 @@ module Isle
 
     # Don't generate system test files.
     config.generators.system_tests = nil
-
     config.action_dispatch.default_headers = {
-      "X-Frame-Options" => "ALLOWALL"
+      "X-Frame-Options" => "ALLOWALL",
+      "Cross-Origin-Embedder-Policy" => "require-corp",
+      "Cross-Origin-Opener-Policy"   => "same-origin"
     }
   end
 end
