@@ -36,45 +36,7 @@ class Scene < ApplicationRecord
     reply_in_thread(text: "🧵...")
   end
 
-  # Returns the public URL where this scene is hosted.
-  # By default this is <pages_base_url>/scenes/:id/
-  # You can override the path for individual scenes by adding a mapping
-  # in Rails credentials under `github: { scene_overrides: { "49": "some/path/" } }`
-  # or by setting ENV["GITHUB_SCENE_OVERRIDES"] to a JSON string like
-  # '{"49":"special/scenes/49/"}'. If the override value is an absolute URL
-  # (starts with http/https) it will be returned directly.
-  def live_url
-    base = Rails.application.credentials.github&.dig(:pages_base_url) || ENV["GITHUB_PAGES_BASE_URL"] || ""
-
-  # Quick hardcoded special-case: serve scene 49 from public/webgame
-  return "#{base}public/webgame/" if id == 49
-
-  # Load overrides from credentials first, then ENV
-    raw_overrides = Rails.application.credentials.github&.dig(:scene_overrides) || ENV["GITHUB_SCENE_OVERRIDES"]
-
-    mapping = case raw_overrides
-              when Hash
-                raw_overrides
-              when String
-                begin
-                  JSON.parse(raw_overrides)
-                rescue StandardError
-                  {}
-                end
-              else
-                {}
-              end
-
-    # Support numeric, string, or symbol keys
-    override = mapping[id] || mapping[id.to_s] || mapping[id.to_sym]
-
-    if override.present?
-      return override.start_with?("http://", "https://") ? override : "#{base}#{override}"
-    end
-
-    "#{base}scenes/#{id}/"
-  end
-
+  def live_url = "#{Rails.application.credentials.github.pages_base_url}scenes/#{id}/"
   def claim!(user)
     update!(user:)
     reply_in_thread(text: "*#{name}* now belongs to _<@#{user.slack_id}>_!")
