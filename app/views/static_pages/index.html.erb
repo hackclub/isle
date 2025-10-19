@@ -1,6 +1,87 @@
-<script>
-  window.location.href = '/scenes';
-</script>
-<noscript>
-  <meta http-equiv="refresh" content="0; url=/scenes">
-</noscript>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Grand Survey expedition
+
+    </title>
+    <style>
+        :root{
+            --bg: #41a5e7;
+            --card-bg: #ffffff;
+            --card-border: #000000;
+            --radius: 12px;
+            --max-width: 900px;
+            --accent: #0b5ea8;
+        }
+        html,body{
+            height:100%;
+            margin:0;
+        }
+        body{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:var(--bg);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color:#000;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            padding:2rem;
+            box-sizing:border-box;
+        }
+        .card{
+            background:var(--card-bg);
+            border:2px solid var(--card-border);
+            border-radius:var(--radius);
+            padding:2rem;
+            max-width:var(--max-width);
+            width:100%;
+            box-sizing:border-box;
+            line-height:1.5;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+        }
+        .card p{ margin:0 0 1rem 0; }
+        .links a{ color:var(--accent); text-decoration:underline; }
+        .actions{ margin-top:1.25rem; display:flex; gap:0.75rem; align-items:center; }
+        .btn{
+            display:inline-block;
+            background:#000;
+            color:#fff;
+            border:0;
+            padding:0.6rem 1rem;
+            border-radius:8px;
+            text-decoration:none;
+            font-weight:600;
+            cursor:pointer;
+        }
+        @media (max-width:520px){
+            .card{ padding:1.25rem; border-radius:10px; }
+            .btn{ width:100%; text-align:center; }
+            .actions{ flex-direction:column; align-items:stretch; }
+        }
+    </style>
+</head>
+<body>
+    <main class="card" role="main" aria-labelledby="title">
+        <h1 id="title" style="margin-top:0;margin-bottom:0.75rem;font-size:1.25rem;">The Grand Survey Expedition</h1>
+        <p>
+            The Grand Survey expedition was a month long experiment ran by
+            <a class="links" href="https://hackclub.com" target="_blank" rel="noopener">Hack Club</a>
+            as part of the
+            <a class="links" href="https://summer.hackclub.com" target="_blank" rel="noopener">Summer Of Making</a>.
+            Participants each created a web page based on a description for a scene on an island. All the pages had neighbouring pages and linked together, making the island home to 100 web pages that could be navigated accross like a point and click adventure game.
+        </p>
+        <p>
+            By the end of the survey we had mapped out the island in full, which you can check out here!
+            The code is also <a class="links" href="http://github.com/hackclub/som-grand-survey-expedition/" target="_blank" rel="noopener">open source</a>.
+        </p>
+
+        <div class="actions">
+            <a class="btn" href="/scenes">Browse the island</a>
+        </div>
+    </main>
+</body>
+</html>
