@@ -47,6 +47,6 @@ gem "vite_rails", "~> 3.0"
 
 gem "phlex-rails", "~> 2.3"
 
-gem "slack-ruby-client", "~> 2.7"
+gem "slack-ruby-client", "~> 3.0"
 
 gem "pundit", "~> 2.5"
